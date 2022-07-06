@@ -1,5 +1,5 @@
 
-import 'package:path/path.dart' as Path;
+import 'package:path/path.dart' as path;
 import 'dart:io';
 
 class TransformEntry {
@@ -121,8 +121,8 @@ void main() {
 
   String libFileName = "serial_comm.dll";
   String className = "SerialCommLib";
-  String inputPath = Path.join(Path.current, 'native', 'SerialComm', 'dllmain.cpp');
-  String outputPath = Path.join(Path.current, 'lib', 'src', 'bindings.dart');
+  String inputPath = path.join(path.current, 'native', 'SerialComm', 'dllmain.cpp');
+  String outputPath = path.join(path.current, 'lib', 'src', 'bindings.dart');
 
   File file = File(inputPath);
   var lines = file.readAsLinesSync();
@@ -132,7 +132,7 @@ void main() {
   output += NewLine;
   output += "import 'dart:ffi';$NewLine";
   output += "import 'package:ffi/ffi.dart';$NewLine";
-  output += "import 'package:path/path.dart' as Path;$NewLine";
+  output += "import 'package:path/path.dart' as path;$NewLine";
   output += NewLine;
 
   output += 'class $className {$NewLine';
@@ -144,7 +144,7 @@ void main() {
   output += '$Tab$className() {$NewLine';
 
   output += NewLine;
-  output += "$Tab${Tab}String libPath = Path.join(Path.current, '$libFileName');$NewLine";
+  output += "$Tab${Tab}String libPath = path.join(path.current, '$libFileName');$NewLine";
   output += '$Tab${Tab}DynamicLibrary dylib = DynamicLibrary.open(libPath);$NewLine';
   
   output += NewLine;

@@ -15,8 +15,9 @@ include: package:lints/recommended.yaml
 
 # Uncomment the following section to specify additional rules.
 
-# linter:
-#   rules:
+linter:
+  rules:
+    curly_braces_in_flow_control_structures: false
 #     - camel_case_types
 
 # analyzer:

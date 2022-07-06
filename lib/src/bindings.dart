@@ -1,7 +1,7 @@
 
 import 'dart:ffi';
 import 'package:ffi/ffi.dart';
-import 'package:path/path.dart' as Path;
+import 'package:path/path.dart' as path;
 
 class SerialCommLib {
 
@@ -19,7 +19,7 @@ class SerialCommLib {
 
   SerialCommLib() {
 
-    String libPath = Path.join(Path.current, 'serial_comm.dll');
+    String libPath = path.join(path.current, 'serial_comm.dll');
     DynamicLibrary dylib = DynamicLibrary.open(libPath);
 
     listPorts = dylib.lookupFunction<Int Function(), int Function()>('listPorts');

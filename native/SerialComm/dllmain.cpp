@@ -27,6 +27,7 @@ DllExport int listPorts() {
 	device_info_data.cbSize = sizeof(SP_DEVINFO_DATA);
 
 	while (SetupDiEnumDeviceInfo(device_info_list, device_info_list_index, &device_info_data)) {
+
 		device_info_list_index++;
 
 		HKEY hKey = SetupDiOpenDevRegKey(
@@ -72,8 +73,12 @@ DllExport int listPorts() {
 			&description_len
 		);
 
-		if (got_description && description_len > 0) description[description_len - 1] = 0;
-		else description[0] = 0;
+		if (got_description && description_len > 0 && description_len <= 256) {
+			description[description_len - 1] = 0;
+		} else {
+			description[0] = 0;
+			description_len = 1;
+		}
 
 
 		serial_port_info_t port_info;

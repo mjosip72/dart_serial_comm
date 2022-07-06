@@ -41,6 +41,7 @@ class SerialPort {
 
   static bool _portOpen = false;
   static ReceivePort? _receivePort;
+  static Isolate? _isolate;
 
   static void Function(String)? _onData;
   static void Function()? _onPortClose;
@@ -69,6 +70,8 @@ class SerialPort {
     int? rxBuffer, int? txBuffer
     }) {
 
+    if(_portOpen) return false;
+
     Pointer<Utf8> nativeName = portName.toNativeUtf8();
     _portOpen = _api.openPort(nativeName);
     malloc.free(nativeName);
@@ -95,13 +98,17 @@ class SerialPort {
   }
 
   static void close() {
+
     if(!_portOpen) return;
+
+    _receivePort!.close();
+    _receivePort = null;
 
     _portOpen = false;
     _api.closePort();
 
-    _receivePort!.close();
-    _receivePort = null;
+    _isolate!.kill();
+    _isolate = null;
 
     if(_onPortClose != null) _onPortClose!();
   
@@ -115,7 +122,7 @@ class SerialPort {
       else if(message == null) close();
     });
 
-    Isolate.spawn(_reading, _receivePort!.sendPort);
+    Isolate.spawn(_reading, _receivePort!.sendPort).then((value) => _isolate = value);
 
   }
 
