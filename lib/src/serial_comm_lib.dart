@@ -101,14 +101,18 @@ class SerialPort {
 
     if(!_portOpen) return;
 
-    _receivePort!.close();
-    _receivePort = null;
+    if(_receivePort != null) {
+      _receivePort!.close();
+      _receivePort = null;
+    }
 
     _portOpen = false;
     _api.closePort();
 
-    _isolate!.kill();
-    _isolate = null;
+    if(_isolate != null) {
+      _isolate!.kill();
+      _isolate = null;
+    }
 
     if(_onPortClose != null) _onPortClose!();
   
